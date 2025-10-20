@@ -6,7 +6,7 @@ import os
 APP = r"D:\new project live imple\trustworthy\app_streamlit.py"
 
 # Change directory to the folder of your project
-os.chdir(os.path.dirname(APP))
+os.chdir(os.path.dirname(D:\new project live imple\trustworthy))
 
 # Import streamlit launcher
 try:
@@ -17,3 +17,4 @@ except Exception:
 # Run the Streamlit app
 sys.argv = ["streamlit", "run", APP, "--server.headless=false"]
 sys.exit(stcli.main())
+
