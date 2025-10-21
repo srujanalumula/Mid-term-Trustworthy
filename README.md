@@ -42,7 +42,8 @@ Top layers replaced with Dense → Dropout → Softmax
 ⚙️ Installation
 pip install --upgrade pip
 pip install tensorflow>=2.15 keras>=3.0.0 streamlit pillow numpy pandas matplotlib seaborn scikit-learn opencv-python tqdm kagglehub
-
+Attribution
+**Attribution:** Some dataset and model utility functions are adapted from open Kaggle sources: [White Blood Cells Dataset](https://www.kaggle.com/datasets/masoudnickparvar/white-blood-cells-dataset)
 🚀 How to Run
 
 1️⃣ Train Models (Optional)
