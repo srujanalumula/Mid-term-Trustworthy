@@ -281,13 +281,13 @@ An example folder structure for this project:
 ```bash
 wbc-trustworthy-ai/
 │
-├── Code_WBC_Classification.ipynb        # End-to-end training of CNN + VGG16 + ResNet50
-├── Trustworthiness_Final.ipynb          # FIM, Influence Functions, robustness, Grad-CAM
+|
+├── Trustworthiness_Final.ipynb          # End-to-end training of CNN + VGG16 + ResNet50  FIM, Influence Functions, robustness, Grad-CAM
 │
 ├── app_streamlit.py                     # Streamlit UI for WBC classifier
 │
 ├── models/
-│   ├── best_wbc_model.keras             # Selected main model (e.g., Custom CNN)
+│   ├── best_wbc_model.keras             #  Custom CNN
 │   ├── vgg16_wbc_model.keras            # VGG16-based model
 │   └── resnet50_wbc_model.keras         # ResNet50-based model
 │
@@ -300,7 +300,7 @@ wbc-trustworthy-ai/
 │   ├── gradcam_correct.png
 │   └── gradcam_wrong.png
 │
-├── data/                                # (Optional local copy; original via KaggleHub)
+|
 │
 └── README.md
 ```
@@ -439,10 +439,8 @@ For each perturbation type and severity level, we:
 ### 9.3 Robustness results
 
 Example figure:
+<img width="735" height="387" alt="Screenshot 2025-12-01 115508" src="https://github.com/user-attachments/assets/a581b23e-cb3c-4e97-9fe6-677d5bc44b59" />
 
-```markdown
-![Robustness Accuracy](figures/robustness_accuracy.png)
-```
 
 This graph can show:
 
