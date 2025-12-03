@@ -480,7 +480,6 @@ We compute Fisher scores for all test samples and plot their distribution:
 
 <img width="735" height="387" alt="Screenshot 2025-12-01 115508" src="https://github.com/user-attachments/assets/6350a3e2-a822-4d4b-8a07-7dabff14a606" />
 
-```
 
 Typical observations:
 
