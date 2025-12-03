@@ -388,7 +388,7 @@ print(classification_report(y_true_classes, y_pred_classes, target_names=class_n
 
 You can save a confusion matrix figure like:
 
-```bash
+
 <img width="867" height="667" alt="Screenshot 2025-12-01 143143" src="https://github.com/user-attachments/assets/40c2a682-6fdc-4670-85f5-53a1f3a17292" />
 
 ```
@@ -479,7 +479,7 @@ F(x) = | g |_2^2
 
 We compute Fisher scores for all test samples and plot their distribution:
 
-```markdown
+
 <img width="735" height="387" alt="Screenshot 2025-12-01 115508" src="https://github.com/user-attachments/assets/6350a3e2-a822-4d4b-8a07-7dabff14a606" />
 
 ```
@@ -525,7 +525,7 @@ where:
 
 We compute influence scores for selected test samples and plot them:
 
-```markdown
+
 <img width="662" height="410" alt="Screenshot 2025-12-01 122309" src="https://github.com/user-attachments/assets/990fa201-aa17-4022-8b8e-a7f61d96ff24" />
 
 ```
