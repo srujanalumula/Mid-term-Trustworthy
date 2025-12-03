@@ -290,18 +290,8 @@ wbc-trustworthy-ai/
 │   ├── best_wbc_model.keras             #  Custom CNN
 │   ├── vgg16_wbc_model.keras            # VGG16-based model
 │   └── resnet50_wbc_model.keras         # ResNet50-based model
-│
-├── figures/
-│   ├── confusion_matrix_cnn.png
-│   ├── train_val_curves_cnn.png
-│   ├── robustness_accuracy.png
-│   ├── fisher_scores_histogram.png
-│   ├── influence_scores_sorted.png
-│   ├── gradcam_correct.png
-│   └── gradcam_wrong.png
-│
 |
-│
+|
 └── README.md
 ```
 
@@ -399,7 +389,8 @@ print(classification_report(y_true_classes, y_pred_classes, target_names=class_n
 You can save a confusion matrix figure like:
 
 ```bash
-figures/confusion_matrix_cnn.png
+<img width="867" height="667" alt="Screenshot 2025-12-01 143143" src="https://github.com/user-attachments/assets/40c2a682-6fdc-4670-85f5-53a1f3a17292" />
+
 ```
 
 Typical observations:
@@ -437,10 +428,6 @@ For each perturbation type and severity level, we:
 * Compare with clean test accuracy
 
 ### 9.3 Robustness results
-
-Example figure:
-<img width="735" height="387" alt="Screenshot 2025-12-01 115508" src="https://github.com/user-attachments/assets/a581b23e-cb3c-4e97-9fe6-677d5bc44b59" />
-
 
 This graph can show:
 
@@ -493,7 +480,8 @@ F(x) = | g |_2^2
 We compute Fisher scores for all test samples and plot their distribution:
 
 ```markdown
-![Fisher Scores Histogram](figures/fisher_scores_histogram.png)
+<img width="735" height="387" alt="Screenshot 2025-12-01 115508" src="https://github.com/user-attachments/assets/6350a3e2-a822-4d4b-8a07-7dabff14a606" />
+
 ```
 
 Typical observations:
@@ -538,7 +526,8 @@ where:
 We compute influence scores for selected test samples and plot them:
 
 ```markdown
-![Influence Scores Sorted](figures/influence_scores_sorted.png)
+<img width="662" height="410" alt="Screenshot 2025-12-01 122309" src="https://github.com/user-attachments/assets/990fa201-aa17-4022-8b8e-a7f61d96ff24" />
+
 ```
 
 From this, we can:
@@ -579,12 +568,6 @@ We generate Grad-CAM on:
 * Correctly classified images
 * Incorrectly classified images
 
-Example figures:
-
-```markdown
-![Grad-CAM Correct](figures/gradcam_correct.png)
-![Grad-CAM Wrong](figures/gradcam_wrong.png)
-```
 
 Typical observations:
 
