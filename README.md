@@ -385,13 +385,11 @@ Example outputs:
 ```python
 print(classification_report(y_true_classes, y_pred_classes, target_names=class_names))
 ```
-
-You can save a confusion matrix figure like:
+ confusion matrix figure like:
 
 
 <img width="867" height="667" alt="Screenshot 2025-12-01 143143" src="https://github.com/user-attachments/assets/40c2a682-6fdc-4670-85f5-53a1f3a17292" />
 
-```
 
 Typical observations:
 
