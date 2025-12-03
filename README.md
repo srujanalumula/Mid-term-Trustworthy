@@ -1,480 +1,869 @@
 
 
-# **White Blood Cell Classification Using Deep Learning & Trustworthiness Evaluation**
+# White Blood Cell Classification Using Deep Learning and Trustworthy AI
 
-A complete research-grade framework for automated **White Blood Cell (WBC) classification**, combined with rigorous **trustworthiness assessments**, including robustness testing, Fisher Information Matrix (FIM), Influence Functions (IF), and explainability using Grad-CAM.
+This is a **complete, detailed, and step-by-step README** for our **White Blood Cell (WBC) Classification** project using Deep Learning, Trustworthiness evaluation, and a Streamlit user interface.
 
-This repository contains the entire workflow—from dataset preparation and model training to sensitivity analysis, robustness evaluation, and UI deployment.
+It explains:
 
----
-
-# **1. Project Overview**
-
-This project presents a comprehensive deep learning pipeline for accurate and trustworthy **White Blood Cell classification** using microscopy images. The system integrates:
-
-* A custom high-capacity CNN
-* Transfer learning models (VGG16, ResNet50)
-* Robustness and sensitivity evaluation
-* Explainability with Grad-CAM
-* Streamlit deployment for real-time use
-
-The goal is to build an AI system that is **accurate**, **robust**, **interpretable**, and **clinically reliable**.
+* What the project does
+* Which models we used (Custom CNN, VGG16, ResNet50)
+* How we trained and evaluated them
+* How we evaluated **trustworthiness**, with a primary focus on **Robustness & Sensitivity**
+* How we used **Fisher Information Matrix (FIM)** and **Influence Functions (IF)**
+* How we used **Grad-CAM** for explainability
+* Why our selected model is the **recommended model for deployment**
+* How to **run the notebooks** and **Streamlit application**
+* How to reproduce robustness and trustworthiness results
 
 ---
 
-# **2. Project Goals**
+## Table of Contents
 
-The objectives of this project are:
-
-### **Model Performance**
-
-* Train and evaluate three deep learning architectures
-* Achieve high accuracy across 5 WBC classes
-
-### **Trustworthiness**
-
-* Analyze model robustness under perturbations
-* Identify sensitive and unstable samples using FIM
-* Detect harmful or influential training samples using Influence Functions
-* Provide localized visual explanations using Grad-CAM
-
-### **Deployment**
-
-* Provide a user-friendly Streamlit interface
-* Enable real-time WBC classification with heatmap visualization
-
----
-
-# **3. Dataset Details**
-
-### **Source**
-
-White Blood Cells Dataset – *Masoud Nickparvar* (Kaggle)
-
-### **Classes**
-
-1. Neutrophil
-2. Lymphocyte
-3. Monocyte
-4. Eosinophil
-5. Basophil
-
-### **Dataset Size**
-
-| Split      | Images     |
-| ---------- | ---------- |
-| Training   | 10,175     |
-| Validation | 2,035      |
-| Test       | 4,339      |
-| **Total**  | **14,514** |
-
-### **Preprocessing**
-
-* RGB conversion
-* Resize
-
-  * CNN: 128×128
-  * VGG16/ResNet50: 224×224
-* Normalize to [0,1]
-* One-hot encoding
-* Stratified dataset split
-
-### **Augmentation**
-
-* Rotation (±20°)
-* Zoom (20%)
-* Horizontal/vertical flips
-* Brightness variation
-* Width/height shift
+1. [Project Overview](#overview)
+2. [Project Goals](#project-goals)
+3. [Dataset Details](#dataset-details)
+4. [Environment Setup](#environment-setup)
+5. [Folder Structure](#folder-structure)
+6. [Models Trained](#models-trained)
+7. [Performance Metrics (Accuracy & Validation)](#performance-metrics-accuracy--validation)
+8. [Confusion Matrix & Classification Metrics](#confusion-matrix--classification-metrics)
+9. [Robustness Evaluation (Trustworthiness)](#robustness-evaluation-trustworthiness)
+10. [Sensitivity Evaluation (Fisher Information Matrix)](#sensitivity-evaluation-fisher-information-matrix)
+11. [Influence Functions Evaluation](#influence-functions-evaluation)
+12. [Explainability Evaluation (Grad-CAM)](#explainability-evaluation-grad-cam)
+13. [Why the Selected Model is Recommended](#why-the-selected-model-is-recommended)
+14. [Reliability & Limitations](#reliability--limitations)
+15. [Download Final Models](#download-final-models)
+16. [Streamlit Deployment](#streamlit-deployment)
+17. [Run the Application](#run-the-application)
+18. [Workflow Summary (Step-by-Step)](#workflow-summary-step-by-step)
+19. [Quick Commands Summary](#quick-commands-summary)
+20. [Troubleshooting](#troubleshooting)
+21. [Future Enhancements](#future-enhancements)
+22. [References & Code Attribution](#references--code-attribution)
+23. [Final Summary](#final-summary)
+24. [Team Members & Contributions](#team-members--contributions)
 
 ---
 
-# **4. Environment Setup**
+<a name="overview"></a>
 
-Install all dependencies:
+# 1. Project Overview
 
-```
-pip install --upgrade pip
-pip install tensorflow keras numpy pandas matplotlib seaborn scikit-learn pillow opencv-python tqdm kagglehub streamlit
-```
+### 1.1 What this project does
 
-GPU support (optional):
+This project:
 
-```
-pip install tensorflow-gpu
-```
+1. Takes a **microscopic image of a white blood cell** as input.
+2. Uses deep learning models to classify it into one of **five WBC types**:
+
+   * Neutrophil
+   * Lymphocyte
+   * Monocyte
+   * Eosinophil
+   * Basophil
+3. Evaluates **how trustworthy** the classifier is by studying:
+
+   * Robustness to perturbations
+   * Sensitivity using **Fisher Information**
+   * Training data impact using **Influence Functions**
+   * Visual explanations with **Grad-CAM**
+4. Exposes the final model via a **Streamlit web app** to allow interactive testing.
+
+### 1.2 Technologies used
+
+* **Python** – core scripting language
+* **TensorFlow + Keras** – deep learning framework
+* **NumPy, Pandas** – data processing
+* **Matplotlib, Seaborn** – visualizations
+* **Scikit-learn** – metrics and confusion matrices
+* **Pillow (PIL)** – image handling
+* **KaggleHub** – dataset download
+* **Streamlit** – web user interface
+
+### 1.3 What is included in this project
+
+This repository includes:
+
+1. **Data loading and preprocessing** code
+2. Training of **three CNN-based models**:
+
+   * Custom CNN
+   * VGG16 (transfer learning)
+   * ResNet50 (transfer learning)
+3. **Accuracy and metric evaluation** to compare models
+4. **Trustworthiness analysis**, focusing on:
+
+   * Sensitivity via **Fisher Information Matrix (FIM)**
+   * Training sample impact via **Influence Functions (IF)**
+   * Robustness under perturbations (noise, blur, brightness)
+   * Explainability via **Grad-CAM heatmaps**
+5. A **Streamlit app** for real-time WBC classification and interpretability.
 
 ---
 
-# **5. Folder Structure**
+<a name="project-goals"></a>
 
+# 2. Project Goals
+
+### 2.1 Core goals
+
+1. Build an accurate classifier for **white blood cell types**.
+2. Use multiple architectures (Custom CNN, VGG16, ResNet50) and compare them.
+3. Implement a user interface to demonstrate the model’s behavior.
+
+### 2.2 Trustworthiness goals
+
+The main **trustworthiness aspect** considered in this project is:
+
+> **Robustness & Sensitivity (Reliability of Predictions)**
+
+Concretely, we:
+
+* Analyze **sensitivity** using **Fisher Information Matrix (FIM)** to identify:
+
+  * Stable vs unstable predictions
+* Analyze **training sample influence** using **Influence Functions (IF)** to identify:
+
+  * Helpful and harmful training samples
+* Evaluate **robustness** under input perturbations:
+
+  * Gaussian noise
+  * Gaussian blur
+  * Brightness changes
+* Use **Grad-CAM** as an additional explainability tool to verify that:
+
+  * The model focuses on **biologically meaningful regions** (e.g., nucleus, cytoplasm), not background.
+
+### 2.3 Final high-level conclusion
+
+After all experiments:
+
+* All models achieve **high accuracy** on clean test data.
+* Robustness and sensitivity analysis show that:
+
+  * Certain samples are much more sensitive (high Fisher scores).
+  * Some training images strongly influence predictions (Influence Functions).
+* **The selected model (stored as `best_wbc_model.keras`)** offers a strong trade-off between:
+
+  * Accuracy
+  * Robustness
+  * Sensitivity profile
+  * Computational efficiency
+  * Explainability (with Grad-CAM)
+
+---
+
+<a name="dataset-details"></a>
+
+# 3. Dataset Details
+
+### 3.1 Dataset Source
+
+We use the **White Blood Cells Dataset** from Kaggle:
+
+* Author: **Masoud Nickparvar**
+* Contains labeled WBC images for 5 classes.
+
+### 3.2 Classes
+
+The dataset contains five major WBC categories:
+
+* **Neutrophil** – multi-lobed nucleus, most abundant type
+* **Lymphocyte** – large, round nucleus, adaptive immunity
+* **Monocyte** – kidney-shaped nucleus, largest WBC
+* **Eosinophil** – bilobed nucleus, red/orange granules
+* **Basophil** – rare, dark granules, involved in allergic responses
+
+### 3.3 Dataset Size (approximate)
+
+* Total images: ~14,514
+* Training images: ~10,175
+* Validation images: ~2,035
+* Test images: ~4,339
+
+(These numbers can be adjusted to match your exact splits.)
+
+### 3.4 Preprocessing Steps
+
+1. Convert all images to **RGB**.
+2. Resize to:
+
+   * `128 x 128` (for Custom CNN)
+   * `224 x 224` (for VGG16, ResNet50)
+3. Normalize pixel values to **[0, 1]**.
+4. Encode labels as **one-hot vectors**.
+5. Use **stratified splitting** for train/validation/test.
+
+### 3.5 Data Augmentation
+
+We apply data augmentation during training to improve generalization:
+
+* Rotation (`±20°`)
+* Width and height shifts (up to 20%)
+* Shear transformation
+* Zoom (up to 20%)
+* Horizontal and vertical flips
+* `fill_mode = 'nearest'` for padded pixels
+
+These augmentations simulate realistic variations in microscopic capture conditions.
+
+---
+
+<a name="environment-setup"></a>
+
+# 4. Environment Setup
+
+### 4.1 Create a virtual environment
+
+**Windows (PowerShell):**
+
+```bash
+python -m venv venv
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\venv\Scripts\activate
 ```
-root/
-│── models/
-│     ├── best_wbc_model.keras
-│     ├── vgg16_wbc_model.keras
-│     └── resnet50_wbc_model.keras
+
+**macOS / Linux:**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 4.2 Install dependencies
+
+Create a `requirements.txt` (example):
+
+```txt
+tensorflow>=2.8.0
+numpy>=1.19.5
+pandas>=1.3.0
+matplotlib>=3.4.3
+seaborn>=0.11.0
+pillow>=8.3.0
+scikit-learn>=1.0.2
+tqdm>=4.62.0
+kagglehub>=0.1.0
+streamlit>=1.20.0
+opencv-python
+```
+
+Then install:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4.3 Launch notebooks
+
+All training and analysis can be run using Jupyter or Google Colab:
+
+```bash
+jupyter notebook
+```
+
+Open:
+
+* `Code_WBC_Classification.ipynb` (or your training notebook)
+* `Trustworthiness_Final.ipynb` (FIM, IF, robustness, Grad-CAM)
+
+---
+
+<a name="folder-structure"></a>
+
+# 5. Folder Structure
+
+An example folder structure for this project:
+
+```bash
+wbc-trustworthy-ai/
 │
-│── figures/
-│     ├── fisher_scores.png
-│     ├── influence_curve.png
-│     ├── robustness_accuracy.png
-│     ├── gradcam_correct.png
-│     └── gradcam_wrong.png
+├── Code_WBC_Classification.ipynb        # End-to-end training of CNN + VGG16 + ResNet50
+├── Trustworthiness_Final.ipynb          # FIM, Influence Functions, robustness, Grad-CAM
 │
-│── notebooks/
-│     ├── Training_Pipeline.ipynb
-│     └── Trustworthiness_Evaluation.ipynb
+├── app_streamlit.py                     # Streamlit UI for WBC classifier
 │
-│── app_streamlit.py
-│── utils/
-│── README.md
+├── models/
+│   ├── best_wbc_model.keras             # Selected main model (e.g., Custom CNN)
+│   ├── vgg16_wbc_model.keras            # VGG16-based model
+│   └── resnet50_wbc_model.keras         # ResNet50-based model
+│
+├── figures/
+│   ├── confusion_matrix_cnn.png
+│   ├── train_val_curves_cnn.png
+│   ├── robustness_accuracy.png
+│   ├── fisher_scores_histogram.png
+│   ├── influence_scores_sorted.png
+│   ├── gradcam_correct.png
+│   └── gradcam_wrong.png
+│
+├── data/                                # (Optional local copy; original via KaggleHub)
+│
+└── README.md
 ```
+
+You can adapt names to match your exact structure.
 
 ---
 
-# **6. Models Trained**
+<a name="models-trained"></a>
 
-Three deep learning models were evaluated:
+# 6. Models Trained
 
-### **1. Custom CNN (Designed from scratch)**
+We trained **three deep learning models**:
 
-* Multi-stage convolutional blocks
-* Batch normalization
-* Dropout regularization
-* 1024 + 512 dense layers
+1. **Custom CNN (from scratch)**
+2. **VGG16 (transfer learning)**
+3. **ResNet50 (transfer learning)**
 
-### **2. VGG16**
+### 6.1 Custom CNN
+
+* Input: `128 x 128 x 3`
+
+* Architecture:
+
+  * Block 1: Conv(64) → Conv(64) → BatchNorm → MaxPool → Dropout
+  * Block 2: Conv(128) → Conv(128) → BatchNorm → MaxPool → Dropout
+  * Block 3: Conv(256) → Conv(256) → BatchNorm → MaxPool → Dropout
+  * Block 4: Conv(512) → Conv(512) → BatchNorm → MaxPool → Dropout
+  * Dense: 1024 → 512 → Softmax(5)
+
+* Saved as: `models/best_wbc_model.keras` (if you choose this as the main model)
+
+### 6.2 VGG16 (Transfer Learning)
 
 * Pretrained on ImageNet
-* Frozen convolution layers
-* Lightweight classifier head
+* Convolutional base **frozen**
+* Custom classification head:
 
-### **3. ResNet50**
+  * Flatten → Dense(200, ReLU) → Dropout → Dense(5, Softmax)
+* Input size: `224 x 224 x 3`
+* Saved as: `models/vgg16_wbc_model.keras`
 
-* Deep residual architecture
-* Best generalization ability
-* Best robustness
+### 6.3 ResNet50 (Transfer Learning)
 
----
+* Pretrained on ImageNet
+* Convolutional layers frozen
+* Custom classifier:
 
-# **7. Performance Metrics (Accuracy & Validation)**
-
-### **Test Accuracy**
-
-| Model      | Accuracy |
-| ---------- | -------- |
-| Custom CNN | ~95%     |
-| VGG16      | ~97%     |
-| ResNet50   | **~98%** |
-
-### **Validation Curves**
-
-* Stable convergence
-* Limited overfitting due to augmentation
-* VGG16/ResNet50 outperform custom CNN
+  * Flatten → Dense(150, ReLU) → Dense(5, Softmax)
+* Input size: `224 x 224 x 3`
+* Saved as: `models/resnet50_wbc_model.keras`
 
 ---
 
-# **8. Confusion Matrix & Classification Metrics**
+<a name="performance-metrics-accuracy--validation"></a>
 
-Detailed classification report includes:
+# 7. Performance Metrics (Accuracy & Validation)
 
-* Precision
-* Recall
-* F1-score
-* Support per class
+Each model was evaluated on:
 
-Confusion matrix visualizations illustrate:
+* Training accuracy
+* Validation accuracy
+* Test accuracy
 
-* High accuracy for Neutrophils/Lymphocytes
-* Moderate confusion between Monocytes & Eosinophils
-* Basophils remain challenging due to limited data
+A typical summary (you can fill with your exact numbers):
+
+| Model      | Train Accuracy | Validation Accuracy | Test Accuracy |
+| ---------- | -------------- | ------------------- | ------------- |
+| Custom CNN | ~94–96%        | ~94–96%             | ~95%          |
+| VGG16      | High           | High                | High          |
+| ResNet50   | High           | High                | High          |
+
+Key points:
+
+* All three models reach high accuracy on clean test data.
+* Transfer learning models (VGG16, ResNet50) slightly outperform the custom CNN in some runs, but with higher computational cost.
+* The selected deployment model is chosen based on **accuracy + robustness + explainability**, not just accuracy.
 
 ---
 
-# **9. Robustness Evaluation (Trustworthiness)**
+<a name="confusion-matrix--classification-metrics"></a>
 
-Robustness tests were conducted under:
+# 8. Confusion Matrix & Classification Metrics
 
-* **Gaussian Noise**
-* **Gaussian Blur**
-* **Brightness Variation**
+For the main model (e.g., Custom CNN), we compute:
 
-### **Key Findings**
+* **Precision, Recall, F1-score** per class
+* **Confusion matrix** over the five WBC classes
 
-| Distortion | CNN    | VGG16 | ResNet50      |
-| ---------- | ------ | ----- | ------------- |
-| Noise      | Medium | High  | **Very High** |
-| Blur       | Medium | High  | **Very High** |
-| Brightness | High   | High  | **Very High** |
+Example outputs:
 
-### **Robustness Accuracy Visual**
-
+```python
+print(classification_report(y_true_classes, y_pred_classes, target_names=class_names))
 ```
+
+You can save a confusion matrix figure like:
+
+```bash
+figures/confusion_matrix_cnn.png
+```
+
+Typical observations:
+
+* High precision and recall for **Neutrophils** and **Lymphocytes**
+* Slightly lower performance on **Monocytes** and **Eosinophils**, due to morphological similarities
+* Basophils are rare → may show slightly lower recall due to class imbalance
+
+---
+
+<a name="robustness-evaluation-trustworthiness"></a>
+
+# 9. Robustness Evaluation (Trustworthiness)
+
+### 9.1 What we mean by robustness
+
+A robust classifier should maintain good performance when inputs are perturbed in realistic ways:
+
+* Microscope noise
+* Slight blur/misfocus
+* Changes in brightness/contrast
+
+### 9.2 Perturbations used
+
+We evaluate models under:
+
+1. **Gaussian Noise** – simulates sensor noise
+2. **Gaussian Blur** – simulates out-of-focus images
+3. **Brightness Change** – simulates different illumination conditions
+
+For each perturbation type and severity level, we:
+
+* Apply the transformation to the test set
+* Measure the test accuracy again
+* Compare with clean test accuracy
+
+### 9.3 Robustness results
+
+Example figure:
+
+```markdown
 ![Robustness Accuracy](figures/robustness_accuracy.png)
 ```
 
-ResNet50 demonstrates the strongest robustness across all perturbations.
+This graph can show:
+
+* X-axis: perturbation type / severity
+* Y-axis: accuracy
+* Curves: CNN, VGG16, ResNet50
+
+Typical trends:
+
+* All models lose some accuracy under heavy perturbations.
+* Transfer learning models may be slightly more stable to blur/brightness.
+* However, the selected model (e.g., Custom CNN) provides a good trade-off between robustness and computational cost.
 
 ---
 
-# **10. Explainability Evaluation (Grad-CAM)**
+<a name="sensitivity-evaluation-fisher-information-matrix"></a>
 
-Grad-CAM visualizations highlight decision-critical regions.
+# 10. Sensitivity Evaluation (Fisher Information Matrix)
 
-### **Correct Prediction**
+### 10.1 Idea
 
+Fisher Information Matrix (FIM) measures **how sensitive the model is** to small changes in its inputs or parameters for a particular sample.
+
+Here, we use a simplified scalar Fisher score per test sample:
+
+Let:
+
+* ( p ) = predicted probability vector
+* ( y ) = one-hot ground truth vector
+
+Compute gradient of loss:
+
+[
+g = p - y
+]
+
+We define the **Fisher score** as:
+
+[
+F(x) = | g |_2^2
+]
+
+### 10.2 Interpretation
+
+* **Low Fisher score** → model is confident and stable for that sample
+* **High Fisher score** → sample is close to a decision boundary, prediction is more fragile
+
+### 10.3 FIM results
+
+We compute Fisher scores for all test samples and plot their distribution:
+
+```markdown
+![Fisher Scores Histogram](figures/fisher_scores_histogram.png)
 ```
-![GradCAM Correct](figures/gradcam_correct.png)
-```
 
-Model focuses on nucleus morphology.
+Typical observations:
 
-### **Incorrect Prediction**
+* Most samples lie in a low-to-moderate Fisher range (stable).
+* A small tail of high-Fisher samples indicates:
 
-```
-![GradCAM Wrong](figures/gradcam_wrong.png)
-```
+  * Ambiguous cells
+  * Low contrast images
+  * Borderline cases between two WBC types
 
-Diffuse, misaligned activation indicates uncertainty.
+These high-Fisher images are important for understanding where the model is least confident.
 
 ---
 
-# **11. Fisher Information Matrix (Sensitivity)**
+<a name="influence-functions-evaluation"></a>
 
-The FIM quantifies prediction confidence and local stability.
+# 11. Influence Functions Evaluation
 
-### **Formula**
+### 11.1 Idea
 
+Influence Functions estimate **how much each training point contributes** to a particular test prediction.
+
+For our approximate implementation, we use:
+
+[
+\text{Influence}(i, j) \approx - (g_{train}[i] \cdot g_{test}[j])
+]
+
+where:
+
+* ( g_{train}[i] ) – gradient of loss for a training sample
+* ( g_{test}[j] ) – gradient of loss for a test sample
+
+### 11.2 Interpretation
+
+* **Positive Influence** → training sample *supports* the correct prediction
+* **Negative Influence** → training sample *harms* the prediction (could be mislabeled or noisy)
+
+### 11.3 Influence results
+
+We compute influence scores for selected test samples and plot them:
+
+```markdown
+![Influence Scores Sorted](figures/influence_scores_sorted.png)
 ```
-g = p – y
-Fisher Score = || g ||²
-```
 
-### **Interpretation**
+From this, we can:
 
-* **Low FIM** → Stable prediction
-* **High FIM** → Uncertain, boundary-case image
+* Identify the **most helpful training images** for a test prediction
+* Identify the **most harmful training images** that push the model towards errors
+* Inspect these cases manually to find:
 
-### **Fisher Score Distribution**
+  * Label noise
+  * Very atypical WBC examples
+  * Edge cases in the training data
 
-```
-![Fisher Score Distribution](figures/fisher_scores.png)
-```
-
-High-FIM samples often contain:
-
-* Poor contrast
-* Partial cells
-* Atypical shapes
+This improves **dataset transparency** and supports trustworthiness.
 
 ---
 
-# **12. Influence Functions (Training-Sample Impact)**
+<a name="explainability-evaluation-grad-cam"></a>
 
-Influence Functions show how each training image affects predictions.
+# 12. Explainability Evaluation (Grad-CAM)
 
-### **Formula (approx.)**
+### 12.1 Why Grad-CAM?
 
+Grad-CAM helps answer:
+
+> *“Where is the model looking when it decides this is a Neutrophil or Lymphocyte?”*
+
+We want to see if the model focuses on:
+
+* Nucleus shape
+* Cytoplasm texture
+* Granules
+  rather than background noise.
+
+### 12.2 Grad-CAM output examples
+
+We generate Grad-CAM on:
+
+* Correctly classified images
+* Incorrectly classified images
+
+Example figures:
+
+```markdown
+![Grad-CAM Correct](figures/gradcam_correct.png)
+![Grad-CAM Wrong](figures/gradcam_wrong.png)
 ```
-Influence = – ( g_train · g_test )
-```
 
-### **Meaning**
+Typical observations:
 
-* Positive → Supports prediction
-* Negative → Confuses or harms prediction
+* For correct predictions, the heatmap is focused on:
 
-### **Influence Curve**
+  * Nuclear region
+  * Cytoplasmic structure
+* For incorrect predictions, the heatmap may be:
 
-```
-![Influence Curve](figures/influence_curve.png)
-```
+  * Spread out
+  * Focused on irrelevant regions
 
-Harmful samples often indicate label noise or severe distortion.
+Grad-CAM thus gives **visual evidence** of model reasoning and is a key part of explainable AI in this project.
 
 ---
 
-# **13. Cross-Dataset Generalization (PlantDoc)**
+<a name="why-the-selected-model-is-recommended"></a>
 
-The model was optionally tested on cross-domain samples such as **PlantDoc** to explore generalization limits.
+# 13. Why the Selected Model is Recommended
 
-Findings:
+Combining all dimensions:
 
-* CNN generalizes moderately
-* ResNet50 retains better feature extraction
-* Domain shift significantly reduces accuracy → expected behavior
+1. **Accuracy on clean test data**
+2. **Robustness under noise/blur/brightness**
+3. **Sensitivity profile (FIM)**
+4. **Training data influence behavior (IF)**
+5. **Explainability (Grad-CAM)**
+6. **Computation and deployment cost**
 
----
+We select the model saved as:
 
-# **14. Why the Custom CNN is Competitive**
-
-Even though ResNet50 achieves the highest accuracy, the custom CNN has advantages:
-
-* Lightweight
-* Faster inference
-* Requires less training time
-* Performs competitively for its size
-
-However, transfer learning architectures outperform it in robustness and trustworthiness.
-
----
-
-# **15. Reliability & Limitations**
-
-### **Reliability Strengths**
-
-* High accuracy
-* Excellent robustness (ResNet50)
-* Strong nucleus-focused explainability
-
-### **Limitations**
-
-* Basophil class is underrepresented
-* Sensitivity varies for low-contrast cells
-* Influence analysis depends on gradient quality
-
----
-
-# **16. Download Final Model**
-
-All trained models are available in:
-
-```
-/models/
+```text
+models/best_wbc_model.keras
 ```
 
-Including:
+as the **recommended deployment model** for:
 
-* best_wbc_model.keras
-* vgg16_wbc_model.keras
-* resnet50_wbc_model.keras
+* The Streamlit application
+* Further experiments and extensions
+
+This model provides the best balance of:
+
+* Strong performance
+* Reasonable robustness
+* Good explainability
+* Practical runtime efficiency
 
 ---
 
-# **17. Streamlit Deployment**
+<a name="reliability--limitations=""></a>
 
-### **Run Locally**
+# 14. Reliability & Limitations
 
+### 14.1 Reliability strengths
+
+* High accuracy on the WBC test set
+* Good robustness to realistic perturbations
+* High-confidence predictions for most test samples (low-to-moderate Fisher scores)
+* Clear Grad-CAM focus on biologically relevant regions
+* Training sample analysis via Influence Functions helps detect problematic data points
+
+### 14.2 Limitations
+
+* The dataset is still relatively controlled; real hospital images might have additional variability.
+* Basophils and other rare classes may still suffer from class imbalance.
+* Influence Function implementation uses approximations, not full Hessian inversion.
+* Robustness to strong adversarial attacks (e.g., PGD with many steps) is not fully addressed.
+
+These limitations form natural directions for future work.
+
+---
+
+<a name="download-final-models"></a>
+
+# 15. Download Final Models
+
+You can store trained models as:
+
+```bash
+models/
+├── best_wbc_model.keras
+├── vgg16_wbc_model.keras
+└── resnet50_wbc_model.keras
 ```
+
+Make sure the Streamlit app points to the correct model path (e.g., `best_wbc_model.keras`).
+
+---
+
+<a name="streamlit-deployment"></a>
+
+# 16. Streamlit Deployment
+
+The Streamlit app (`app_streamlit.py`) provides:
+
+* **Image upload** component
+* **Model prediction with confidence**
+* **Class probability bar chart**
+* Optional **Grad-CAM heatmap** (if enabled)
+
+---
+
+<a name="run-the-application"></a>
+
+# 17. Run the Application
+
+From your project root:
+
+```bash
 streamlit run app_streamlit.py
 ```
 
-### **Features**
+Then open:
 
-* Upload image
-* Predict class & confidence
-* Show probability distribution
-* Generate Grad-CAM visualization
+```text
+http://localhost:8501
+```
+
+Workflow:
+
+1. Upload a WBC image (`.jpg`, `.png`).
+2. The app preprocesses and feeds it into the selected model.
+3. The app shows:
+
+   * Predicted class
+   * Confidence score
+   * Probability distribution over all 5 classes
+   * (Optional) Grad-CAM heatmap to visualize attention (if implemented in the app).
 
 ---
 
-# **18. Run the Application**
+<a name="workflow-summary-step-by-step"></a>
 
-Place the model file in the project directory then run:
+# 18. Workflow Summary (Step-by-Step)
 
-```
-streamlit run app_streamlit.py
-```
+1. **Download dataset** (via KaggleHub or manually).
+2. **Preprocess images** (resize, normalize, encode labels).
+3. **Train models**:
 
-Browser will open automatically.
-
----
-
-# **19. Docker Deployment**
-
-(Dockerfile can be added)
-
-Example:
-
-```
-docker build -t wbc_app .
-docker run -p 8501:8501 wbc_app
-```
+   * Custom CNN (128×128)
+   * VGG16 (224×224)
+   * ResNet50 (224×224)
+4. **Evaluate models** on clean test set (accuracy, confusion matrix, metrics).
+5. **Run robustness experiments** (noise, blur, brightness) and record accuracy drop.
+6. **Compute Fisher scores** for test samples and analyze sensitivity distribution.
+7. **Compute Influence Functions** to estimate impact of training samples.
+8. **Generate Grad-CAM heatmaps** for correct and incorrect predictions.
+9. **Compare models** based on performance + trustworthiness.
+10. **Select final model** (`best_wbc_model.keras`).
+11. **Deploy Streamlit app** for interactive WBC classification.
 
 ---
 
-# **20. Test the Model**
+<a name="quick-commands-summary"></a>
 
-After training:
+# 19. Quick Commands Summary
 
-```
-python test_model.py --image sample.png
-```
+```bash
+# Activate environment
+.\venv\Scripts\activate          # Windows
+source venv/bin/activate         # macOS/Linux
 
-or use the Streamlit UI.
-
----
-
-# **21. Workflow Summary (Step-by-Step)**
-
-1. Download dataset
-2. Preprocess & augment images
-3. Train CNN, VGG16, ResNet50
-4. Evaluate performance
-5. Conduct trustworthiness tests:
-
-   * FIM
-   * Influence Functions
-   * Robustness curves
-   * Grad-CAM
-6. Deploy final model via Streamlit
-
----
-
-# **22. Quick Commands Summary**
-
-```
+# Install dependencies
 pip install -r requirements.txt
-python train.py
-python evaluate.py
+
+# Launch Jupyter
+jupyter notebook
+
+# Run Streamlit app
 streamlit run app_streamlit.py
 ```
 
 ---
 
-# **23. Troubleshooting**
+<a name="troubleshooting"></a>
 
-| Issue                  | Solution                        |
-| ---------------------- | ------------------------------- |
-| TensorFlow DLL error   | Install correct TF version      |
-| Grad-CAM heatmap blank | Ensure last conv layer exists   |
-| Low GPU memory         | Reduce batch size               |
-| Model not loading      | Ensure correct .keras file path |
+# 20. Troubleshooting
 
----
-
-# **24. Future Enhancements**
-
-* Self-supervised pretraining
-* Attention-based explainability (ViT or Grad-CAM++)
-* Balanced dataset creation
-* Federated learning for privacy-preserving WBC classification
-* Adversarial robustness testing (FGSM, PGD)
+| Issue                               | Possible Cause                        | Fix                                           |
+| ----------------------------------- | ------------------------------------- | --------------------------------------------- |
+| `ImportError: tensorflow`           | TensorFlow not installed              | `pip install tensorflow>=2.8.0`               |
+| `DLL load failed` on Windows        | TensorFlow vs Python mismatch         | Use Python 3.9/3.10 and TF 2.8+               |
+| Model file not found                | Wrong path to `.keras` model file     | Check `models/` folder and update path in app |
+| Strange predictions / wrong labels  | Class order mismatch                  | Ensure `class_names` matches training order   |
+| Streamlit error `no cache_resource` | Older Streamlit version               | Upgrade via `pip install --upgrade streamlit` |
+| GPU RAM issues                      | Model too big or batch size too large | Reduce batch size or train smaller model      |
 
 ---
 
-# **25. References**
+<a name="future-enhancements"></a>
 
-* Nickparvar, Masoud. *White Blood Cells Dataset*, Kaggle
-* Selvaraju et al., "Grad-CAM"
-* Koh & Liang, "Influence Functions"
-* Goodfellow et al., "Deep Learning"
+# 21. Future Enhancements
+
+* Add **adversarial attack** robustness (FGSM, PGD) explicitly for WBC images.
+* Use **Grad-CAM++** for sharper explanations.
+* Perform **cross-dataset evaluation** with other WBC datasets or real hospital images.
+* Incorporate **uncertainty estimation** (e.g., MC Dropout).
+* Explore **Vision Transformers (ViT)** for WBC classification.
 
 ---
 
-# **26. Final Summary**
+<a name="references--code-attribution"></a>
 
-This repository presents a complete trustworthy-AI framework for WBC classification using deep learning. Beyond achieving high accuracy, the system incorporates:
+# 22. References & Code Attribution
 
-* **Robustness evaluation** under real-world distortions
-* **Sensitivity measurement** via Fisher Information Matrix
-* **Training-sample introspection** via Influence Functions
-* **Clinically interpretable heatmaps** via Grad-CAM
+### Dataset
 
-With strong model performance and comprehensive trustworthiness analysis, this framework represents a reliable, practical foundation for medical imaging applications.
+* Masoud Nickparvar, *White Blood Cells Dataset* (Kaggle)
+
+### Concepts and Methods
+
+* Fisher Information and sensitivity-based analysis (standard statistical methodology)
+* Influence Functions: Koh & Liang, “Understanding Black-box Predictions via Influence Functions”
+* Grad-CAM: Selvaraju et al., “Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization”
+* CNN, VGG16, ResNet50 architectures: Keras / TensorFlow model zoo and original papers
+
+### Code Attribution
+
+* Data loading and augmentation patterns are inspired by common Keras/TensorFlow examples and Kaggle notebooks.
+* Trustworthiness components (Fisher score computation, Influence Function approximation, robustness experiment loops, Grad-CAM integration for this specific WBC use case) were implemented and adapted specifically for this project.
+
+---
+
+<a name="final-summary"></a>
+
+# 23. Final Summary
+
+This project implements a **White Blood Cell classification system** with:
+
+* High accuracy using multiple deep learning models
+* A strong focus on **trustworthiness**, through:
+
+  * Robustness evaluation under perturbations
+  * Sensitivity analysis via **Fisher Information**
+  * Influence analysis via **Influence Functions**
+  * Visual explanations via **Grad-CAM**
+* A practical **Streamlit-based user interface** for interactive usage.
+
+The selected model (`best_wbc_model.keras`) delivers a well-balanced combination of:
+
+* Performance
+* Robustness
+* Interpretability
+* Practical deployability
+
+making it a strong candidate for future integration into clinical decision support workflows.
+
+---
+
+<a name="team-members--contributions"></a>
+
+# 24. Team Members & Contributions
+
+This project was completed by a team of **three members**:
+
+* **Srujan Alumula**
+
+  * Implemented **trustworthiness analysis**:
+
+    * Fisher Information Matrix (FIM)
+    * Influence Functions (IF)
+    * Robustness experiments (noise, blur, brightness)
+  * Integrated **Grad-CAM** explainability for WBC images
+  * Helped with result interpretation and documentation (trustworthiness sections)
+
+* **Tarun**
+
+  * Implemented and fine-tuned **VGG16** and **ResNet50** transfer learning models
+  * Ran baseline **accuracy evaluations**, confusion matrices, and metric comparisons
+  * Contributed to hyperparameter tuning and model selection logic
+
+* **Sireesha**
+
+  * Implemented and trained the **Custom CNN** model
+  * Developed the **Streamlit user interface** (`app_streamlit.py`)
+  * Integrated saved models into the app and prepared usage instructions
 
 
 
-Just tell me.
+---
+
