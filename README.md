@@ -789,26 +789,54 @@ streamlit run app_streamlit.py
 
 <a name="references--code-attribution"></a>
 
-# 22. References & Code Attribution
+22. References & Code Attribution
+Dataset
 
-### Dataset
+Masoud Nickparvar, White Blood Cells Dataset (Kaggle)
 
-* Masoud Nickparvar, *White Blood Cells Dataset* (Kaggle)
+Concepts and Methods
 
-### Concepts and Methods
+Fisher Information and sensitivity-based analysis (standard statistical methodology)
 
-* Fisher Information and sensitivity-based analysis (standard statistical methodology)
-* Influence Functions: Koh & Liang, “Understanding Black-box Predictions via Influence Functions”
-* Grad-CAM: Selvaraju et al., “Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization”
-* CNN, VGG16, ResNet50 architectures: Keras / TensorFlow model zoo and original papers
+Influence Functions: Koh & Liang, “Understanding Black-box Predictions via Influence Functions”
 
-### Code Attribution
+Grad-CAM: Selvaraju et al., “Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization”
 
-* Data loading and augmentation patterns are inspired by common Keras/TensorFlow examples and Kaggle notebooks.
-* Trustworthiness components (Fisher score computation, Influence Function approximation, robustness experiment loops, Grad-CAM integration for this specific WBC use case) were implemented and adapted specifically for this project.
+CNN, VGG16, ResNet50 architectures: Keras / TensorFlow model zoo and original papers
 
----
+External Code References / Source Code Links
 
+Parts of the data loading, CNN design patterns, transfer learning setup, and training utilities were inspired or adapted (with modifications) from the following public notebooks and repositories:
+
+Link 1 – Blood Cell CNN (Kaggle):
+https://www.kaggle.com/code/eliatoma/blood-cell-cnn
+
+Link 2 – WBC Classification Notebook (Kaggle):
+https://www.kaggle.com/code/amrawni/notebookf80d2791a8
+
+Link 3 – White Blood Cell Classification with Two Pretrained Models (Kaggle):
+https://www.kaggle.com/code/abdelrahmanammar/wblood-cell-classification-with-2-pretrained-model
+
+Link 4 – White Blood Cell Classification (GitHub):
+https://github.com/M-Husnain-Ali/White-Blood-Cell-Classification/blob/main/code.ipynb
+
+These sources were used as references for:
+
+General CNN training structure
+
+Transfer learning setups for VGG16 and ResNet-style models
+
+Handling of WBC datasets and preprocessing flows
+
+Code Developed for This Project
+
+The integrated pipeline for Custom CNN + VGG16 + ResNet50 comparison,
+
+The trustworthiness components (FIM, Influence Functions, robustness experiments),
+
+The Grad-CAM adaptation for this WBC classifier, and
+
+The Streamlit user interface and overall integration
 <a name="final-summary"></a>
 
 # 23. Final Summary
