@@ -1,6 +1,7 @@
 
 
-# White Blood Cell Classification Using Deep Learning and Trustworthy AI
+# ANALYZING THE ROBUSTNESS OF BLOOD CELL CLASSIFIERS
+
 
 This is a **complete, detailed, and step-by-step README** for our **White Blood Cell (WBC) Classification** project using Deep Learning, Trustworthiness evaluation, and a Streamlit user interface.
 
